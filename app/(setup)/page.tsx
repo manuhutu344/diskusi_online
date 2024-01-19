@@ -17,7 +17,7 @@ async function page() {
     if(server){
         return redirect(`/servers/${server.id}`)
     }
-  return <div>Coba Dulu</div>
+  return <div>Buat Server Anda Disini</div>
 }
 
 export default page
