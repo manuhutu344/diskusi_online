@@ -2,6 +2,7 @@ import React from 'react'
 import {initialProfile} from '@/lib/initial-profile'
 import { db } from '@/lib/db'
 import { redirect } from 'next/navigation'
+import {InitialModal} from '@/components/modals/initial-modal'
 
 async function page() {
     const profile = await initialProfile()
@@ -17,7 +18,6 @@ async function page() {
     if(server){
         return redirect(`/servers/${server.id}`)
     }
-  return <div>Buat Server Anda Disini</div>
+    return <InitialModal />
 }
-
 export default page
