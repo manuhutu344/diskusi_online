@@ -5,6 +5,7 @@ import React from 'react'
 import NavigationAction from './NavigationAction'
 import { Separator } from './ui/separator'
 import { ScrollArea } from './ui/scroll-area'
+import NavigationItem from './NavigationItem'
 
 async function NavigationSidebar() {
     const profile = await currentProfile()
@@ -31,8 +32,12 @@ async function NavigationSidebar() {
          />
          <ScrollArea className='flex-1 w-full'>
             {(await server).map((server)=>(
-                <div key={server.id}>
-                    {server.name}
+                <div key={server.id} className='mb-4'>
+                    <NavigationItem 
+                        id={server.id}
+                        name={server.name}
+                        imageUrl={server.imageUrl}
+                     />
                 </div>
             ))}
          </ScrollArea>
