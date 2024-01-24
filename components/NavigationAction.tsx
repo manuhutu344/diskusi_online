@@ -2,10 +2,13 @@
 
 import { Plus } from 'lucide-react'
 import React from 'react'
+import ActionTooltip from '@/components/action-tooltip'
 
 function NavigationAction() {
   return (
     <div>
+      <ActionTooltip side='right' align='center' label='Menambahkan Server'>
+
         <button className='group flex items-center'>
             <div className='flex 
             mx-3 h-[48px] w-[48px] 
@@ -15,9 +18,10 @@ function NavigationAction() {
                 <Plus
                     className='group-hover:text-white transition text-emerald-500'
                     size={25}
-                 />
+                    />
             </div>
         </button>
+      </ActionTooltip>
     </div>
   )
 }
