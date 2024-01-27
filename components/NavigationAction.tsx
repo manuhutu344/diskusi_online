@@ -3,13 +3,15 @@
 import { Plus } from 'lucide-react'
 import React from 'react'
 import ActionTooltip from '@/components/action-tooltip'
+import { useModal } from '@/hooks/use-model-store'
 
 function NavigationAction() {
+  const {onOpen} = useModal()
   return (
     <div>
       <ActionTooltip side='right' align='center' label='Menambahkan Server'>
 
-        <button className='group flex items-center'>
+        <button onClick={()=>onOpen("Membuat Server")} className='group flex items-center'>
             <div className='flex 
             mx-3 h-[48px] w-[48px] 
             rounded-[24px] group-hover:rounded-[16px] 
