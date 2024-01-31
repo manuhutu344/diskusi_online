@@ -3,7 +3,7 @@
 import { ServerWithMembersWithProfiles } from '@/types'
 import { MemberRole} from '@prisma/client'
 import React from 'react'
-import { DropdownMenu, DropdownMenuTrigger } from './ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { ChevronDown } from 'lucide-react'
 
 interface Props{
@@ -22,6 +22,13 @@ function ServerHeader({server, role}:Props) {
           <ChevronDown className='h-5 w-5 ml-auto' />
         </button>
       </DropdownMenuTrigger>
+      <DropdownMenuContent className='w-56 text-xs font-medium text-black dark:text-neutral-400 space-y-[2px]'>
+        {isModerator && (
+          <DropdownMenuItem>
+            Undang Orang Disini
+          </DropdownMenuItem>
+        )}
+      </DropdownMenuContent>
     </DropdownMenu>
   )
 }
