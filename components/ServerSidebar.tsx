@@ -3,6 +3,7 @@ import { db } from '@/lib/db'
 import { redirect } from 'next/navigation'
 import React from 'react'
 import {ChanelType} from "@prisma/client"
+import ServerHeader from './ServerHeader'
 
 interface Props{
     serverId: string
@@ -49,7 +50,10 @@ async function ServerSidebar({serverId}:Props) {
 
   return (
     <div className='flex flex-col h-full text-primary w-full dark:bg-[#2B2D31] bg-[#F2F3F5]'>
-        ServerSidebar
+        <ServerHeader
+            server={server}
+            role={role}
+         />
     </div>
   )
 }
