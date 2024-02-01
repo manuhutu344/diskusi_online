@@ -3,8 +3,8 @@
 import { ServerWithMembersWithProfiles } from '@/types'
 import { MemberRole} from '@prisma/client'
 import React from 'react'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
-import { ChevronDown } from 'lucide-react'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu'
+import { ChevronDown, LogOut, PlusCircle, Settings, Trash, UserPlus, Users } from 'lucide-react'
 
 interface Props{
     server: ServerWithMembersWithProfiles
@@ -24,8 +24,42 @@ function ServerHeader({server, role}:Props) {
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-56 text-xs font-medium text-black dark:text-neutral-400 space-y-[2px]'>
         {isModerator && (
-          <DropdownMenuItem>
-            Undang Orang Disini
+          <DropdownMenuItem className='text-indigo-600 dark:text-indigo-400 px-3 py-2 text-sm cursor-pointer'>
+            Undang Teman
+            <UserPlus className='h-4 w-4 ml-auto' />
+          </DropdownMenuItem>
+        )}
+        {isAdmin && (
+          <DropdownMenuItem className='px-3 py-2 text-sm cursor-pointer'>
+            Seting Server
+            <Settings className='h-4 w-4 ml-auto' />
+          </DropdownMenuItem>
+        )}
+         {isAdmin && (
+          <DropdownMenuItem className='px-3 py-2 text-sm cursor-pointer'>
+            Mengelola Member
+            <Users className='h-4 w-4 ml-auto' />
+          </DropdownMenuItem>
+        )}
+         {isModerator && (
+          <DropdownMenuItem className='px-3 py-2 text-sm cursor-pointer'>
+            Buat Channel
+            <PlusCircle className='h-4 w-4 ml-auto' />
+          </DropdownMenuItem>
+        )}
+        {isModerator && (
+          <DropdownMenuSeparator />
+        )}
+         {isAdmin && (
+          <DropdownMenuItem className='text-rose-500 px-3 py-2 text-sm cursor-pointer'>
+            Hapus Server
+            <Trash className='h-4 w-4 ml-auto' />
+          </DropdownMenuItem>
+        )}
+        {!isAdmin && (
+          <DropdownMenuItem className='text-rose-500 px-3 py-2 text-sm cursor-pointer'>
+            Pergi Ajah
+            <LogOut className='h-4 w-4 ml-auto' />
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>
