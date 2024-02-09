@@ -5,7 +5,7 @@ import { useModal } from "@/hooks/use-model-store"
 import { ServerWithMembersWithProfiles } from '@/types'
 import { ScrollArea } from '../ui/scroll-area'
 import UserAvatar from '../UserAvatar'
-import { Check, Gavel, Settings, Shield, ShieldAlert, ShieldCheck, ShieldQuestion } from 'lucide-react'
+import { Check, Gavel, Loader2, Settings, Shield, ShieldAlert, ShieldCheck, ShieldQuestion } from 'lucide-react'
 import { useState } from 'react'
 import {
     DropdownMenu,
@@ -18,6 +18,10 @@ import {
     DropdownMenuTrigger,
     DropdownMenuSubTrigger
 } from '@/components/ui/dropdown-menu'
+import { MemberRole } from '@prisma/client'
+import qs from "query-string"
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
 const roleIconMap = {
     "GUEST": null,
@@ -26,10 +30,30 @@ const roleIconMap = {
 }
 
 export function MembersModal(){
+    const router = useRouter()
     const {isOpen, onClose, type, data, onOpen} = useModal()
     const [loadingId, setLoadingId] = useState("")
     const isModalOpen = isOpen && type === "member"
     const {server} = data as {server: ServerWithMembersWithProfiles}
+
+    async function onRoleChange(memberId: string, role: MemberRole){
+        try {
+            setLoadingId(memberId)
+            const url = qs.stringifyUrl({
+                url: `/api/members/${memberId}`,
+                query:{
+                    serverId: server?.id,
+                }
+            })
+            const response = await axios.patch(url, {role})
+            router.refresh()
+            onOpen("member", {server: response.data})
+        } catch (error) {
+            console.log(error)
+        }finally{
+            setLoadingId("")
+        }
+    }
 
 
     
@@ -71,14 +95,14 @@ export function MembersModal(){
                                                 </DropdownMenuSubTrigger>
                                                 <DropdownMenuPortal>
                                                     <DropdownMenuSubContent>
-                                                        <DropdownMenuItem>
+                                                        <DropdownMenuItem onClick={()=>onRoleChange(member.id, "GUEST")}>
                                                             <Shield className='h-4 w-4 mr-2' />
                                                             GUEST
                                                             {member.role === "GUEST" && (
                                                                 <Check className='h-4 w-4 ml-auto' />
                                                             )}
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuItem>
+                                                        <DropdownMenuItem onClick={()=>onRoleChange(member.id, "MODERATOR")}>
                                                             <ShieldCheck className='h-4 w-4 mr-2' />
                                                             Moderator
                                                             {member.role === "MODERATOR" && (
@@ -96,6 +120,9 @@ export function MembersModal(){
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </div>
+                            )}
+                            {loadingId === member.id && (
+                                <Loader2 className='animate-spin text-zinc-500 ml-auto w-4 h-4' />
                             )}
                         </div>
                     ))}
