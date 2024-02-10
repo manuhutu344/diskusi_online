@@ -35,6 +35,24 @@ export function MembersModal(){
     const [loadingId, setLoadingId] = useState("")
     const isModalOpen = isOpen && type === "member"
     const {server} = data as {server: ServerWithMembersWithProfiles}
+    async function onKick(memberId: string){
+        try {
+            setLoadingId(memberId)
+            const url = qs.stringifyUrl({
+                url: `/api/members/${memberId}`,
+                query: {
+                    serverId: server?.id
+                },
+            })
+            const response = await axios.delete(url)
+            router.refresh()
+            onOpen("member", {server: response.data})
+        } catch (error) {
+            console.log(error)
+        }finally{
+            setLoadingId("")
+        }
+    }
 
     async function onRoleChange(memberId: string, role: MemberRole){
         try {
@@ -113,7 +131,7 @@ export function MembersModal(){
                                                 </DropdownMenuPortal>
                                             </DropdownMenuSub>
                                             <DropdownMenuSeparator />
-                                            <DropdownMenuItem>
+                                            <DropdownMenuItem onClick={()=>onKick(member.id)}>
                                                 <Gavel className='h-4 w-4 mr-2' />
                                                 Tendang Dari Server
                                             </DropdownMenuItem>
