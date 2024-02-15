@@ -8,9 +8,9 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 
 
-export function LeaveServerModal(){
+export function DeleteServerModal(){
     const {isOpen, onClose, type, data} = useModal()
-    const isModalOpen = isOpen && type === "Tinggalkan Server"
+    const isModalOpen = isOpen && type === "Hapus Server"
     const {server} = data
     const [isLoading, setIsLoading] = useState(false)
     const router = useRouter()
@@ -18,7 +18,7 @@ export function LeaveServerModal(){
     async function onClick(){
         try {
             setIsLoading(true)
-            await axios.patch(`/api/servers/${server?.id}/leave`)
+            await axios.delete(`/api/servers/${server?.id}`)
             onClose()
             router.refresh()
         } catch (error) {
@@ -34,10 +34,11 @@ export function LeaveServerModal(){
             <DialogContent className='bg-white text-black p-0 overflow-hidden'>
                 <DialogHeader className='pt-8 px-6'>
                     <DialogTitle className='text-2xl text-center font-bold'>
-                      Mau Pergi Dari Server ?
+                      Mau Hapus Server Ini ?
                     </DialogTitle>
                     <DialogDescription className='text-center text-zinc-500'>
-                        Yakin Nih Mau Tingalin Server <span className='font-semibold text-indigo-500'>{server?.name}</span>?
+                        Yakin Nih Mau Hapus Server Ini ? <br />
+                        <span className='text-indigo-500 font-semibold'>{server?.name}</span> Akan Di Hapus Permanen.
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter className='bg-gray-100 px-6 py-4'>
