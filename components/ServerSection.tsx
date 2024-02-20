@@ -4,7 +4,7 @@ import { ServerWithMembersWithProfiles } from '@/types'
 import { MemberRole, ChanelType } from '@prisma/client'
 import React from 'react'
 import ActionTooltip from './action-tooltip'
-import { Plus } from 'lucide-react'
+import { Plus, Settings } from 'lucide-react'
 import { useModal } from '@/hooks/use-model-store'
 
 interface Props{
@@ -24,10 +24,17 @@ function ServerSection({label, role, sectionType, channelType, server}:Props) {
         </p>
         {role !== MemberRole.GUEST && sectionType === 'channels' && (
             <ActionTooltip label='Buat Channel' side='top'>
-                <button onClick={()=>onOpen('Buat Channel')} className='text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300 transition'>
+                <button onClick={()=>onOpen('Buat Channel', {server})} className='text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300 transition'>
                     <Plus className='h-4 w-4' />
                 </button>
             </ActionTooltip>
+        )}
+        {role === MemberRole.ADMIN && sectionType === 'members' && (
+            <ActionTooltip label='Buat Channel' side='top'>
+            <button onClick={()=>onOpen('member', {server})} className='text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300 transition'>
+                <Settings className='h-4 w-4' />
+            </button>
+        </ActionTooltip>
         )}
     </div>
   )

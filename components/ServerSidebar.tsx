@@ -9,6 +9,7 @@ import ServerSearch from './ServerSearch'
 import { Check, Hash, Mic, ShieldCheck, Video } from 'lucide-react'
 import { Separator } from './ui/separator'
 import ServerSection from './ServerSection'
+import ServerChannel from './ServerChannel'
 
 interface Props{
     serverId: string
@@ -116,6 +117,9 @@ async function ServerSidebar({serverId}:Props) {
             {!!textChannels?.length && (
                 <div className='mb-2'>
                     <ServerSection sectionType='channels' channelType={ChanelType.TEXT} role={role} label='Text' />
+                    {textChannels.map((channel)=>(
+                        <ServerChannel key={channel.id} channel={channel} role={role} server={server} />
+                    ))}
                 </div>
             )}
          </ScrollArea>
