@@ -10,6 +10,7 @@ import { Check, Hash, Mic, ShieldCheck, Video } from 'lucide-react'
 import { Separator } from './ui/separator'
 import ServerSection from './ServerSection'
 import ServerChannel from './ServerChannel'
+import ServerMember from './ServerMember'
 
 interface Props{
     serverId: string
@@ -135,6 +136,14 @@ async function ServerSidebar({serverId}:Props) {
                     <ServerSection sectionType='channels' channelType={ChanelType.VIDEO} role={role} label='Video Channel' />
                     {videoChannels.map((channel)=>(
                         <ServerChannel key={channel.id} channel={channel} role={role} server={server} />
+                    ))}
+                </div>
+            )}
+            {!!members?.length && (
+                <div className='mb-2'>
+                    <ServerSection sectionType='members' role={role} label='Anggota' server={server} />
+                    {members.map((member)=>(
+                        <ServerMember />
                     ))}
                 </div>
             )}
