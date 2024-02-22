@@ -30,7 +30,7 @@ function ServerSection({label, role, sectionType, channelType, server}:Props) {
             </ActionTooltip>
         )}
         {role === MemberRole.ADMIN && sectionType === 'members' && (
-            <ActionTooltip label='Buat Channel' side='top'>
+            <ActionTooltip label='Mengelolah Member' side='top'>
             <button onClick={()=>onOpen('member', {server})} className='text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300 transition'>
                 <Settings className='h-4 w-4' />
             </button>
