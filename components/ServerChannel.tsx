@@ -6,6 +6,7 @@ import { Edit, Hash, Lock, Mic, Trash, Video } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import React from 'react'
 import ActionTooltip from './action-tooltip'
+import { useModal } from '@/hooks/use-model-store'
 
 interface Props{
     channel: Chanel
@@ -23,6 +24,7 @@ function ServerChannel({channel, server, role}:Props) {
     const params = useParams()
     const router = useRouter()
     const Icon = iconMap[channel.type]
+    const {onOpen} = useModal()
   return (
     <button onClick={()=>{}} className={cn(
         'group px-2 py-2 rounded-md flex items-center gap-x-2 w-full hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50 transition mb-1',
@@ -41,7 +43,7 @@ function ServerChannel({channel, server, role}:Props) {
                     <Edit className='hidden group-hover:block w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300 transition' />
                 </ActionTooltip>
                 <ActionTooltip label='Hapus'>
-                    <Trash className='hidden group-hover:block w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300 transition' />
+                    <Trash onClick={()=>onOpen("Hapus Channel", {server, channel})} className='hidden group-hover:block w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300 transition' />
                 </ActionTooltip>
             </div>
         )} 
