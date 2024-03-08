@@ -45,7 +45,7 @@ async function page({params}:Props) {
 
   return (
     <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
-      <ChatHeader imageUrl={otherMember.profile.imageUrl} name={otherMember.profile.name} serverId={params.serverId} type='conversation' />
+      <ChatHeader imageUrl={otherMember.profile.imageUrl} name={otherMember.profile.name} serverId={params.serverId} type="conversation" />
     </div>
   )
 }
