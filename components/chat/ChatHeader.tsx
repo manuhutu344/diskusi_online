@@ -2,6 +2,7 @@ import { Hash} from 'lucide-react'
 import React from 'react'
 import Mobiletoggle from '../mobile-toggle'
 import UserAvatar from '../UserAvatar'
+import SocketIndicator from '../SocketIndicator'
 
 interface Props{
     serverId: string
@@ -23,6 +24,9 @@ function ChatHeader({serverId, name, type, imageUrl}:Props) {
         <p className="font-semibold text-md text-black dark:text-white">
             {name}
         </p>
+        <div className="ml-auto flex items-center">
+          <SocketIndicator />
+        </div>
     </div>
   )
 }
