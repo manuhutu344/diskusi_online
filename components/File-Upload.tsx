@@ -3,7 +3,7 @@
 import React from 'react'
 import {UploadDropzone} from '@/lib/uploading'
 import '@uploadthing/react/styles.css'
-import {FileIcon, Video, X} from "lucide-react"
+import {DogIcon, FileIcon, Video, X} from "lucide-react"
 import Image from 'next/image'
 
 interface Props{
@@ -43,7 +43,6 @@ function FileUpload({onChange, value, endpoint}:Props) {
       </div>
     )
   }
-
   return (
     <UploadDropzone
     endpoint={endpoint}
