@@ -1,12 +1,20 @@
 "use client"
 
 import { Member, MemberRole, Profile } from '@prisma/client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import UserAvatar from '../UserAvatar'
 import ActionTooltip from '../action-tooltip'
-import { Check, CheckCircle2, FileIcon } from 'lucide-react'
+import { Check, CheckCircle2, Edit, FileIcon, Trash } from 'lucide-react'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
+import {Form, FormControl, FormField, FormItem} from "@/components/ui/form"
+import * as z from "zod"
+import axios from 'axios'
+import qs from "query-string"
+import {useForm} from "react-hook-form"
+import {zodResolver} from "@hookform/resolvers/zod"
+import { Input } from '../ui/input'
+import { Button } from '../ui/button'
 
 interface Props{
     id: string
@@ -30,9 +38,30 @@ const roleIconMap = {
 
 }
 
+const fromSchema = z.object({
+    content: z.string().min(1),
+})
+
 function ChatItem({id, content, member, timestamp, deleted, currentMember, isUpdate, socketUrl, socketQuery, fileUrl}:Props) {
     const [isEditing, setIsEditing] = useState(false)
     const [isDeleting, setIseleting] = useState(false)
+    const form = useForm<z.infer<typeof fromSchema>>({
+        resolver: zodResolver(fromSchema),
+        defaultValues: {
+            content: content
+        }
+    })
+
+    function onSubmit(values){
+        console.log(values)
+    }
+
+    useEffect(()=>{
+        form.reset({
+            content: content,
+        })
+    },[content])
+
     const fileType = fileUrl?.split(".").pop()
     const isAdmin = currentMember.role === MemberRole.ADMIN
     const isModerator = currentMember.role === MemberRole.MODERATOR
@@ -87,8 +116,41 @@ function ChatItem({id, content, member, timestamp, deleted, currentMember, isUpd
                         )}
                     </p>
                 )}
+                {!fileUrl && isEditing &&(
+                    <Form {...form}>
+                        <form className="flex items-center w-full gap-x-2 pt-2" onSubmit={form.handleSubmit(onSubmit)}>
+                            <FormField control={form.control} name='content' render={({field}) =>(
+                                <FormItem className="flex-1">
+                                    <FormControl>
+                                        <div className="relative w-full">
+                                            <Input className="p-2 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200" placeholder='Edit Pesan Anda' {...field} />
+                                        </div>
+                                    </FormControl>
+                                </FormItem>
+                            )} />
+                            <Button size="sm" variant="primary">
+                                Simpan Perubahan
+                            </Button>
+                        </form>
+                        <span className="text-[10px] mt-1 text-zinc-400">
+                            Pencet ini untuk mengagalkan atau enter untuk simpan
+                        </span>
+                    </Form>
+                )}
             </div>
         </div>
+        {canDeleteMessage && (
+            <div className="hidden group-hover:flex items-center gap-x-2 absolute p-1 -top-2 right-5 bg-white dark:bg-zinc-800 border rounded-sm">
+                {canEditMessage && (
+                    <ActionTooltip label="Edit">
+                        <Edit onClick={()=>setIsEditing(true)} className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition" />
+                    </ActionTooltip>
+                )}
+                    <ActionTooltip label="Hapus">
+                        <Trash className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition" />
+                    </ActionTooltip>
+            </div>
+        )}
     </div>
   )
 }
