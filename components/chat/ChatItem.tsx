@@ -45,6 +45,17 @@ const fromSchema = z.object({
 function ChatItem({id, content, member, timestamp, deleted, currentMember, isUpdate, socketUrl, socketQuery, fileUrl}:Props) {
     const [isEditing, setIsEditing] = useState(false)
     const [isDeleting, setIseleting] = useState(false)
+
+        useEffect(()=>{
+            function handleKeyDown(event: any){
+                if(event.key === "escape" || event.keyCode === 27){
+                    setIsEditing(false)
+                }
+            }
+            window.addEventListener("keydown", handleKeyDown)
+            return () => window.removeEventListener("keydown", handleKeyDown)
+        }, [])
+
     const form = useForm<z.infer<typeof fromSchema>>({
         resolver: zodResolver(fromSchema),
         defaultValues: {
@@ -52,8 +63,18 @@ function ChatItem({id, content, member, timestamp, deleted, currentMember, isUpd
         }
     })
 
-    function onSubmit(values){
-        console.log(values)
+    const isLoading = form.formState.isSubmitting
+
+  async function onSubmit(values: z.infer<typeof fromSchema>){
+        try {
+            const url = qs.stringifyUrl({
+                url: `${socketUrl}/${id}`,
+                query: socketQuery,
+            })
+            await axios.patch(url, values)
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     useEffect(()=>{
@@ -123,12 +144,12 @@ function ChatItem({id, content, member, timestamp, deleted, currentMember, isUpd
                                 <FormItem className="flex-1">
                                     <FormControl>
                                         <div className="relative w-full">
-                                            <Input className="p-2 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200" placeholder='Edit Pesan Anda' {...field} />
+                                            <Input disabled={isLoading} className="p-2 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200" placeholder='Edit Pesan Anda' {...field} />
                                         </div>
                                     </FormControl>
                                 </FormItem>
                             )} />
-                            <Button size="sm" variant="primary">
+                            <Button disabled={isLoading} size="sm" variant="primary">
                                 Simpan Perubahan
                             </Button>
                         </form>
