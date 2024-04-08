@@ -72,6 +72,8 @@ function ChatItem({id, content, member, timestamp, deleted, currentMember, isUpd
                 query: socketQuery,
             })
             await axios.patch(url, values)
+            form.reset()
+            setIsEditing(false)
         } catch (error) {
             console.log(error)
         }
@@ -132,7 +134,7 @@ function ChatItem({id, content, member, timestamp, deleted, currentMember, isUpd
                         {content}
                         {isUpdate && !deleted &&(
                             <span className="text-[10px] mx-2 text-zinc-500 dark:text-zinc-400">
-                                (edit)
+                                (Teredit)
                             </span>
                         )}
                     </p>
