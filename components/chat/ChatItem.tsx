@@ -15,6 +15,7 @@ import {useForm} from "react-hook-form"
 import {zodResolver} from "@hookform/resolvers/zod"
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
+import { useModal } from '@/hooks/use-model-store'
 
 interface Props{
     id: string
@@ -44,7 +45,7 @@ const fromSchema = z.object({
 
 function ChatItem({id, content, member, timestamp, deleted, currentMember, isUpdate, socketUrl, socketQuery, fileUrl}:Props) {
     const [isEditing, setIsEditing] = useState(false)
-    const [isDeleting, setIseleting] = useState(false)
+    const {onOpen} = useModal()
 
         useEffect(()=>{
             function handleKeyDown(event: any){
@@ -170,7 +171,10 @@ function ChatItem({id, content, member, timestamp, deleted, currentMember, isUpd
                     </ActionTooltip>
                 )}
                     <ActionTooltip label="Hapus">
-                        <Trash className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition" />
+                        <Trash onClick={()=>onOpen("HapusPesan", {
+                            apiUrl: `${socketUrl}/${id}`,
+                            query: socketQuery,
+                        })} className="cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition" />
                     </ActionTooltip>
             </div>
         )}
