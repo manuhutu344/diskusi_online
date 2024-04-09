@@ -32,8 +32,8 @@ export function useChatQuery({queryKey, apiUrl, paramKey, paramValue}:Props){
         queryKey: [queryKey],
         queryFn: fetchMessages,
         getNextPageParam: (lastPage) => lastPage?.nextCursor,
-        refetchInterval: isConnected ? false : 1000,
-        initialPageParam: undefined, // Or some other value if there's a better one
+        refetchInterval: 1000,
+        initialPageParam: undefined,
       });
     return{
         data,
