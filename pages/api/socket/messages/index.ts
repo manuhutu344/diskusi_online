@@ -79,7 +79,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponseS
         }
        })
 
-       const channelKey = `Chat Dari:${channelId}`
+       const channelKey = `chat:${channelId}:messages`
 
        res?.socket?.server?.io?.emit(channelKey, message)
 
