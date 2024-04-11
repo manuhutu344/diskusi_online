@@ -6,6 +6,8 @@ import { db } from '@/lib/db'
 import { redirectToSignIn } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 import React from 'react'
+import {ChanelType} from "@prisma/client"
+import MediaRoom from '@/components/MediaRoom'
 
 interface Props{
   params:{
@@ -41,6 +43,8 @@ async function page({params}:Props) {
   return (
     <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
       <ChatHeader name={channel.name} serverId={channel.serverId} type='channel' />
+      {channel.type === ChanelType.TEXT && (
+        <>
       <ChatMessages member={member} name={channel.name} chatId={channel.id} type='channel' apiUrl="/api/messages" socketUrl='/api/socket/messages' socketQuery={{
         channelId: channel.id,
         serverId: channel.serverId
@@ -49,6 +53,14 @@ async function page({params}:Props) {
         channelId: channel.id,
         serverId: channel.serverId
       }} />
+        </>
+      )}
+      {channel.type === ChanelType.AUDIO && (
+        <MediaRoom chatId={channel.id} video={false} audio={true} />
+      )}
+      {channel.type === ChanelType.VIDEO && (
+        <MediaRoom chatId={channel.id} video={true} audio={true} />
+      )}
     </div>
   )
 }

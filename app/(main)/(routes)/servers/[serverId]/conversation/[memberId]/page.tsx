@@ -1,3 +1,4 @@
+import MediaRoom from '@/components/MediaRoom'
 import ChatHeader from '@/components/chat/ChatHeader'
 import ChatInput from '@/components/chat/ChatInput'
 import ChatMessages from '@/components/chat/ChatMessages'
@@ -12,10 +13,13 @@ interface Props{
   params:{
     memberId: string
     serverId: string
+  },
+  searchParams:{
+    video?: boolean
   }
 }
 
-async function page({params}:Props) {
+async function page({params, searchParams}:Props) {
   const profile = await currentProfile()
 
   if(!profile){
@@ -48,12 +52,19 @@ async function page({params}:Props) {
   return (
     <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
       <ChatHeader imageUrl={otherMember.profile.imageUrl} name={otherMember.profile.name} serverId={params.serverId} type="conversation" />
+      {searchParams.video && (
+        <MediaRoom chatId={conversation.id} video={true} audio={true}/>
+      )}
+      {!searchParams.video && (
+        <>
       <ChatMessages member={currentMember} name={otherMember.profile.name} chatId={conversation.id} type="conversation" apiUrl='/api/direct-messages' paramKey="conversationId" paramValue={conversation.id} socketUrl="/api/socket/direct-messages" socketQuery={{
         conversationId: conversation.id
       }} />
       <ChatInput name={otherMember.profile.name} type="conversation" apiUrl='/api/socket/direct-messages' query={{
         conversationId: conversation.id
       }} />
+        </>
+      )}
     </div>
   )
 }
